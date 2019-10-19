@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import com.almoullim.background_location.Utils
+import android.graphics.BitmapFactory
 
 
 class LocationUpdatesService : Service() {
@@ -36,7 +37,7 @@ class LocationUpdatesService : Service() {
         internal val EXTRA_LOCATION = "$PACKAGE_NAME.location"
         private val EXTRA_STARTED_FROM_NOTIFICATION = "$PACKAGE_NAME.started_from_notification"
         // TODO: Parameterize update interval
-        private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 60000;
+        private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 120000;
         private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
         private val NOTIFICATION_ID = 12345678
         private lateinit var broadcastReceiver: BroadcastReceiver
@@ -60,8 +61,8 @@ class LocationUpdatesService : Service() {
                     .setOngoing(true)
                     .setSound(null)
                     .setPriority(Notification.PRIORITY_HIGH)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.navigation_empty_icon));
-                    .setSmallIcon(R.drawable.navigation_empty_icon)
+                    // .setLargeIcon(BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_stat_whatshot));
+                    // .setSmallIcon(R.drawable.ic_stat_whatshot)
                     .setWhen(System.currentTimeMillis())
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setChannelId(CHANNEL_ID)
@@ -174,7 +175,7 @@ class LocationUpdatesService : Service() {
         mLocationRequest = LocationRequest()
         mLocationRequest!!.interval = UPDATE_INTERVAL_IN_MILLISECONDS
         mLocationRequest!!.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
-        mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest!!.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
     }
 
 
