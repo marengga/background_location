@@ -35,7 +35,8 @@ class LocationUpdatesService : Service() {
         internal val ACTION_BROADCAST = "$PACKAGE_NAME.broadcast"
         internal val EXTRA_LOCATION = "$PACKAGE_NAME.location"
         private val EXTRA_STARTED_FROM_NOTIFICATION = "$PACKAGE_NAME.started_from_notification"
-        private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
+        // TODO: Parameterize update interval
+        private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 60000;
         private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
         private val NOTIFICATION_ID = 12345678
         private lateinit var broadcastReceiver: BroadcastReceiver
@@ -52,13 +53,14 @@ class LocationUpdatesService : Service() {
 
             val activityPendingIntent = PendingIntent.getBroadcast(this, 0, Intent(STOP_SERVICE), 0)
 
+            // TODO: Parameterize title, text, and other things.
             val builder = NotificationCompat.Builder(this)
-                    .addAction(R.drawable.abc_cab_background_top_material, "Stop location Service",
-                            activityPendingIntent)
                     .setContentTitle("Background Location Service is Running")
+                    .setContentText("Caraka periodically detect and record your location to monitor your activity.")
                     .setOngoing(true)
                     .setSound(null)
                     .setPriority(Notification.PRIORITY_HIGH)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.navigation_empty_icon));
                     .setSmallIcon(R.drawable.navigation_empty_icon)
                     .setWhen(System.currentTimeMillis())
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
